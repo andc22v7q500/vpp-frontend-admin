@@ -44,6 +44,11 @@ const router = createRouter({
       component: () => import('../views/products/ProductForm.vue'),
       props: true,
     },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: () => import('../views/orders/OrderList.vue'),
+    },
   ],
 })
 router.beforeEach((to, from, next) => {
