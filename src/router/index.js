@@ -28,6 +28,22 @@ const router = createRouter({
       name: 'brands',
       component: () => import('../views/BrandView.vue'),
     },
+    {
+      path: '/products',
+      name: 'products',
+      component: () => import('../views/products/ProductList.vue'),
+    },
+    {
+      path: '/products/add',
+      name: 'product.add',
+      component: () => import('../views/products/ProductForm.vue'), // File này sẽ tạo ở bước sau
+    },
+    {
+      path: '/products/edit/:id',
+      name: 'product.edit',
+      component: () => import('../views/products/ProductForm.vue'),
+      props: true,
+    },
   ],
 })
 router.beforeEach((to, from, next) => {
