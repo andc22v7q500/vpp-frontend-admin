@@ -1,65 +1,64 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
-import DanhMucService from '@/services/danh-muc.service'
+import ThuongHieuService from '@/services/thuong-hieu.service'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const categories = ref([])
+const brands = ref([])
 const dialogVisible = ref(false)
 const isEditMode = ref(false)
 const formRef = ref(null)
 
-// Dữ liệu cho form
+// Dữ liệu cho form (Chú ý: ten_thuong_hieu chứ không phải ten_danh_muc)
 const form = reactive({
   id: null,
-  ten_danh_muc: '',
+  ten_thuong_hieu: '',
 })
 
 const rules = {
-  ten_danh_muc: [{ required: true, message: 'Vui lòng nhập tên danh mục', trigger: 'blur' }],
+  ten_thuong_hieu: [{ required: true, message: 'Vui lòng nhập tên thương hiệu', trigger: 'blur' }],
 }
 
 // Lấy danh sách
-const fetchCategories = async () => {
+const fetchBrands = async () => {
   try {
-    const data = await DanhMucService.getAll()
-    // Sắp xếp mảng dữ liệu theo ID tăng dần
-    categories.value = data.sort((a, b) => a.id - b.id)
+    const data = await ThuongHieuService.getAll()
+    brands.value = data.sort((a, b) => a.id - b.id)
   } catch (error) {
     console.error(error)
   }
 }
 
-// Mở dialog để thêm mới
+// Mở dialog thêm
 const openAddDialog = () => {
   isEditMode.value = false
   form.id = null
-  form.ten_danh_muc = ''
+  form.ten_thuong_hieu = ''
   dialogVisible.value = true
 }
 
-// Mở dialog để sửa
+// Mở dialog sửa
 const openEditDialog = (row) => {
   isEditMode.value = true
   form.id = row.id
-  form.ten_danh_muc = row.ten_danh_muc
+  form.ten_thuong_hieu = row.ten_thuong_hieu
   dialogVisible.value = true
 }
 
-// Xử lý Submit form
+// Submit
 const handleSubmit = async () => {
   if (!formRef.value) return
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
         if (isEditMode.value) {
-          await DanhMucService.update(form.id, { ten_danh_muc: form.ten_danh_muc })
+          await ThuongHieuService.update(form.id, { ten_thuong_hieu: form.ten_thuong_hieu })
           ElMessage.success('Cập nhật thành công')
         } else {
-          await DanhMucService.create({ ten_danh_muc: form.ten_danh_muc })
+          await ThuongHieuService.create({ ten_thuong_hieu: form.ten_thuong_hieu })
           ElMessage.success('Thêm mới thành công')
         }
         dialogVisible.value = false
-        fetchCategories() // Tải lại danh sách
+        fetchBrands()
       } catch (error) {
         console.error(error)
         ElMessage.error('Có lỗi xảy ra')
@@ -68,30 +67,26 @@ const handleSubmit = async () => {
   })
 }
 
-// Xử lý Xóa
+// Xóa
 const handleDelete = (id) => {
-  ElMessageBox.confirm(
-    'Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác.',
-    'Cảnh báo',
-    {
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy',
-      type: 'warning',
-    },
-  ).then(async () => {
+  ElMessageBox.confirm('Bạn có chắc chắn muốn xóa thương hiệu này?', 'Cảnh báo', {
+    confirmButtonText: 'Xóa',
+    cancelButtonText: 'Hủy',
+    type: 'warning',
+  }).then(async () => {
     try {
-      await DanhMucService.delete(id)
+      await ThuongHieuService.delete(id)
       ElMessage.success('Đã xóa thành công')
-      fetchCategories()
+      fetchBrands()
     } catch (error) {
       console.error(error)
-      ElMessage.error('Không thể xóa (có thể do danh mục đang chứa sản phẩm)')
+      ElMessage.error('Không thể xóa (có thể do thương hiệu đang được sử dụng)')
     }
   })
 }
 
 onMounted(() => {
-  fetchCategories()
+  fetchBrands()
 })
 </script>
 
@@ -105,16 +100,15 @@ onMounted(() => {
         margin-bottom: 20px;
       "
     >
-      <h2>Quản lý Danh mục</h2>
+      <h2>Quản lý Thương hiệu</h2>
       <el-button type="primary" @click="openAddDialog">
         <el-icon style="margin-right: 5px"><Plus /></el-icon> Thêm mới
       </el-button>
     </div>
 
-    <!-- Bảng dữ liệu -->
-    <el-table :data="categories" style="width: 100%" border stripe>
+    <el-table :data="brands" style="width: 100%" border stripe>
       <el-table-column prop="id" label="ID" width="80" align="center" />
-      <el-table-column prop="ten_danh_muc" label="Tên Danh mục" />
+      <el-table-column prop="ten_thuong_hieu" label="Tên Thương hiệu" />
       <el-table-column label="Hành động" width="180" align="center">
         <template #default="scope">
           <el-button size="small" @click="openEditDialog(scope.row)">Sửa</el-button>
@@ -123,15 +117,14 @@ onMounted(() => {
       </el-table-column>
     </el-table>
 
-    <!-- Dialog Thêm/Sửa -->
     <el-dialog
       v-model="dialogVisible"
-      :title="isEditMode ? 'Cập nhật Danh mục' : 'Thêm Danh mục mới'"
+      :title="isEditMode ? 'Cập nhật Thương hiệu' : 'Thêm Thương hiệu mới'"
       width="500px"
     >
-      <el-form :model="form" :rules="rules" ref="formRef" label-width="120px">
-        <el-form-item label="Tên danh mục" prop="ten_danh_muc">
-          <el-input v-model="form.ten_danh_muc" />
+      <el-form :model="form" :rules="rules" ref="formRef" label-width="140px">
+        <el-form-item label="Tên thương hiệu" prop="ten_thuong_hieu">
+          <el-input v-model="form.ten_thuong_hieu" />
         </el-form-item>
       </el-form>
       <template #footer>

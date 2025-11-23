@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'categories',
       component: () => import('../views/CategoryView.vue'),
     },
+    {
+      path: '/brands',
+      name: 'brands',
+      component: () => import('../views/BrandView.vue'),
+    },
   ],
 })
 router.beforeEach((to, from, next) => {
