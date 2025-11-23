@@ -13,12 +13,22 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue'),
     },
     // Chúng ta sẽ thêm route Login sau
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: () => import('../views/LoginView.vue'), // Sẽ tạo sau
-    // },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'), // Sẽ tạo sau
+    },
   ],
 })
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('admin_user')
 
+  if (authRequired && !loggedIn) {
+    next('/login')
+  } else {
+    next()
+  }
+})
 export default router
