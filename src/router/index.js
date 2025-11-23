@@ -18,6 +18,11 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'), // Sẽ tạo sau
     },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: () => import('../views/CategoryView.vue'),
+    },
   ],
 })
 router.beforeEach((to, from, next) => {
