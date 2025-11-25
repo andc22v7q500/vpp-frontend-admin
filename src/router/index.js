@@ -49,6 +49,16 @@ const router = createRouter({
       name: 'orders',
       component: () => import('../views/orders/OrderList.vue'),
     },
+    {
+      path: '/imports',
+      name: 'imports',
+      component: () => import('../views/imports/ImportList.vue'),
+    },
+    {
+      path: '/imports/add',
+      name: 'import.add',
+      component: () => import('../views/imports/ImportForm.vue'),
+    },
   ],
 })
 router.beforeEach((to, from, next) => {
