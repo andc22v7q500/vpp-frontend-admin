@@ -4,6 +4,18 @@ import DonHangService from '@/services/don-hang.service'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const orders = ref([])
+const dialogVisible = ref(false)
+const selectedOrder = ref(null)
+
+// Hàm xem chi tiết
+const viewDetail = async (id) => {
+  try {
+    selectedOrder.value = await DonHangService.getDetail(id)
+    dialogVisible.value = true
+  } catch (error) {
+    ElMessage.error('Lỗi khi tải chi tiết đơn hàng')
+  }
+}
 
 // Hàm format tiền tệ
 const formatCurrency = (value) => {
@@ -113,8 +125,12 @@ onMounted(() => {
         </template>
       </el-table-column>
 
-      <el-table-column label="Hành động" width="250">
+      <el-table-column label="Hành động" width="300">
         <template #default="scope">
+          <!-- Nút Xem Chi tiết -->
+          <el-button size="small" @click="viewDetail(scope.row.id)" style="margin-right: 5px">
+            Chi tiết
+          </el-button>
           <!-- Nút Duyệt đơn (Chỉ hiện khi Chờ xác nhận) -->
           <el-button
             v-if="scope.row.trang_thai === 'cho_xac_nhan'"
@@ -159,5 +175,55 @@ onMounted(() => {
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog v-model="dialogVisible" title="Chi tiết Đơn hàng" width="800px">
+      <div v-if="selectedOrder">
+        <el-descriptions title="Thông tin chung" :column="2" border>
+          <el-descriptions-item label="Mã đơn">#{{ selectedOrder.id }}</el-descriptions-item>
+          <el-descriptions-item label="Ngày đặt">{{
+            formatDate(selectedOrder.ngay_dat)
+          }}</el-descriptions-item>
+          <el-descriptions-item label="Khách hàng">{{
+            selectedOrder.ten_khach_hang
+          }}</el-descriptions-item>
+          <el-descriptions-item label="SĐT">{{ selectedOrder.so_dien_thoai }}</el-descriptions-item>
+          <el-descriptions-item label="Tổng tiền">
+            <span style="color: red; font-weight: bold">{{
+              formatCurrency(selectedOrder.tong_tien)
+            }}</span>
+          </el-descriptions-item>
+          <el-descriptions-item label="Trạng thái">
+            <el-tag :type="getStatusTag(selectedOrder.trang_thai)">{{
+              getStatusText(selectedOrder.trang_thai)
+            }}</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="Địa chỉ" :span="2">{{
+            selectedOrder.dia_chi_giao_hang
+          }}</el-descriptions-item>
+        </el-descriptions>
+
+        <h4 style="margin-top: 20px">Danh sách sản phẩm</h4>
+        <el-table :data="selectedOrder.chi_tiet" border style="width: 100%">
+          <el-table-column label="Ảnh" width="70">
+            <template #default="scope">
+              <img
+                :src="`http://localhost:3000/${scope.row.hinh_anh_dai_dien}`"
+                style="width: 50px; height: 50px; object-fit: cover"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="ten_san_pham" label="Sản phẩm" />
+          <el-table-column prop="ten_mau_ma" label="Mẫu mã" width="120" />
+          <el-table-column label="Đơn giá" width="120">
+            <template #default="scope">{{ formatCurrency(scope.row.don_gia) }}</template>
+          </el-table-column>
+          <el-table-column prop="so_luong" label="SL" width="60" align="center" />
+          <el-table-column label="Thành tiền" width="120">
+            <template #default="scope">{{
+              formatCurrency(scope.row.don_gia * scope.row.so_luong)
+            }}</template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
   </div>
 </template>

@@ -26,6 +26,9 @@ class DonHangService {
   }
 
   // (Sau này có thể thêm getDetail nếu cần API riêng, nhưng API getAll hiện tại đã trả về khá đủ thông tin chung)
+  async getDetail(id) {
+    return (await this.api.get(`/${id}`)).data
+  }
 }
 
 export default new DonHangService()
