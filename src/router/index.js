@@ -12,6 +12,11 @@ const router = createRouter({
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
     },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: () => import('../views/ChatManager.vue'),
+    },
     // Chúng ta sẽ thêm route Login sau
     {
       path: '/login',
