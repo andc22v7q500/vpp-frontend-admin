@@ -110,6 +110,14 @@ onMounted(() => {
           }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="Thanh toán" width="120" align="center">
+        <template #default="scope">
+          <el-tag v-if="scope.row.phuong_thuc_thanh_toan === 'vnpay'" type="success" effect="dark"
+            >VNPAY</el-tag
+          >
+          <el-tag v-else type="info" effect="plain">COD</el-tag>
+        </template>
+      </el-table-column>
 
       <el-table-column label="Ngày đặt" width="180">
         <template #default="scope">
