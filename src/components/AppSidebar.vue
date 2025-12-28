@@ -1,15 +1,18 @@
 <template>
   <el-menu
-    active-text-color="#ffd04b"
-    background-color="#545c64"
+    active-text-color="#409EFF"
+    background-color="#304156"
     class="el-menu-vertical-demo"
     default-active="1"
-    text-color="#fff"
+    text-color="#bfcbd9"
     :router="true"
     style="height: 100vh; border-right: none"
   >
     <div class="logo-container">
-      <h3 class="text-white text-center py-3">ADMIN SHOP</h3>
+      <h3 class="text-center py-3 m-0" style="color: #fff; font-weight: bold; letter-spacing: 1px">
+        <el-icon style="margin-right: 8px; vertical-align: middle"><UserFilled /></el-icon> VPP-Quản
+        Lý
+      </h3>
     </div>
 
     <el-menu-item index="/dashboard">
@@ -57,6 +60,10 @@
 
 <style scoped>
 .logo-container {
-  background-color: #434a50;
+  background-color: #2b3648;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
