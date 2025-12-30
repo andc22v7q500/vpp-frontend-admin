@@ -39,6 +39,8 @@ const getStatusTag = (status) => {
   switch (status) {
     case 'cho_xac_nhan':
       return 'warning'
+    case 'cho_thanh_toan':
+      return 'danger'
     case 'dang_xu_ly':
       return 'primary'
     case 'dang_giao':
@@ -55,6 +57,7 @@ const getStatusTag = (status) => {
 const getStatusText = (status) => {
   const map = {
     cho_xac_nhan: 'Chờ xác nhận',
+    cho_thanh_toan: 'Chưa thanh toán',
     dang_xu_ly: 'Đang xử lý',
     dang_giao: 'Đang giao',
     hoan_thanh: 'Hoàn thành',
@@ -110,12 +113,24 @@ onMounted(() => {
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Thanh toán" width="120" align="center">
+      <el-table-column label="Thanh toán" width="140" align="center">
         <template #default="scope">
-          <el-tag v-if="scope.row.phuong_thuc_thanh_toan === 'vnpay'" type="success" effect="dark"
-            >VNPAY</el-tag
+          <!-- Trường hợp 1: VNPAY Thật -->
+          <el-tag v-if="scope.row.phuong_thuc_thanh_toan === 'vnpay'" type="success" effect="dark">
+            VNPAY
+          </el-tag>
+
+          <!-- Trường hợp 2: VNPAY Giả lập (Backup) -->
+          <el-tag
+            v-else-if="scope.row.phuong_thuc_thanh_toan === 'vnpay_fake'"
+            type="warning"
+            effect="dark"
           >
-          <el-tag v-else type="info" effect="plain">COD</el-tag>
+            VNPAY Demo
+          </el-tag>
+
+          <!-- Trường hợp 3: COD -->
+          <el-tag v-else type="info" effect="plain"> COD </el-tag>
         </template>
       </el-table-column>
 
@@ -125,8 +140,9 @@ onMounted(() => {
         </template>
       </el-table-column>
 
-      <el-table-column label="Trạng thái" width="150" align="center">
+      <el-table-column label="Trạng thái" width="180" align="center">
         <template #default="scope">
+          <!-- Tag trạng thái chính -->
           <el-tag :type="getStatusTag(scope.row.trang_thai)">
             {{ getStatusText(scope.row.trang_thai) }}
           </el-tag>
@@ -172,7 +188,7 @@ onMounted(() => {
 
           <!-- Nút Hủy (Chỉ hiện khi chưa hoàn thành/hủy) -->
           <el-button
-            v-if="['cho_xac_nhan', 'dang_xu_ly'].includes(scope.row.trang_thai)"
+            v-if="['cho_thanh_toan', 'cho_xac_nhan', 'dang_xu_ly'].includes(scope.row.trang_thai)"
             size="small"
             type="danger"
             plain
