@@ -1,5 +1,5 @@
 import createApiClient from './api.service'
-// Lưu ý: Chúng ta import từ store của ADMIN
+
 // import { useAuthStore } from '@/stores/auth.store'
 
 class DanhMucService {

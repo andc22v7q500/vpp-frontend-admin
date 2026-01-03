@@ -34,8 +34,7 @@ class SanPhamService {
     return (await this.api.post(`/${productId}/mau-ma`, data)).data
   }
   // (Lưu ý: Update và Delete mẫu mã dùng route khác: /api/mau-ma/:id)
-  // Chúng ta cần tạo thêm MauMaService riêng hoặc gọi trực tiếp axios nếu lười
-  // Để chuẩn, ta nên tạo MauMaService riêng, nhưng tạm thời anh/chị sẽ gộp logic vào đây cho gọn
+
   async uploadImages(id, formData) {
     return (
       await this.api.post(`/${id}/hinh-anh`, formData, {

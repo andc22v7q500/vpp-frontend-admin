@@ -8,7 +8,6 @@ const dialogVisible = ref(false)
 const isEditMode = ref(false)
 const formRef = ref(null)
 
-// Dữ liệu cho form (Chú ý: ten_thuong_hieu chứ không phải ten_danh_muc)
 const form = reactive({
   id: null,
   ten_thuong_hieu: '',

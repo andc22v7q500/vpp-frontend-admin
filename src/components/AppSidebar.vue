@@ -48,7 +48,7 @@
       <el-menu-item index="/customers">Khách hàng</el-menu-item>
       <el-menu-item index="/staffs">Nhân viên</el-menu-item>
     </el-sub-menu>
-    <!-- --- THÊM MENU CHAT VÀO ĐÂY --- -->
+    <!-- --- THÊM MENU CHAT VÀO  --- -->
     <el-menu-item index="/chat">
       <el-icon><ChatDotRound /></el-icon>
       <!-- Icon chat -->

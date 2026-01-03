@@ -26,14 +26,6 @@ const fetchProducts = async () => {
   }
 }
 
-// Khi chọn sản phẩm, cần lấy danh sách mẫu mã của sản phẩm đó
-// (Để đơn giản, ở đây ta giả sử API getAll đã trả về đủ thông tin, hoặc ta phải gọi API chi tiết.
-// Cách tốt nhất cho thực tế: Dropdown chọn sản phẩm -> Gọi API lấy mẫu mã -> Dropdown chọn mẫu mã.
-// NHƯNG ĐỂ NHANH GỌN CHO TIỂU LUẬN: Ta sẽ làm dropdown chọn sản phẩm, sau đó tự động chọn mẫu mã đầu tiên hoặc hiển thị dropdown mẫu mã nếu có thời gian)
-
-// --- PHƯƠNG ÁN ĐƠN GIẢN CHO TIỂU LUẬN ---
-// Ta sẽ load TẤT CẢ sản phẩm, và khi chọn sản phẩm, ta sẽ gọi API lấy chi tiết để lấy danh sách mẫu mã của nó.
-
 const productVariantsMap = reactive({}) // Cache danh sách mẫu mã của các sản phẩm đã chọn
 
 const handleProductChange = async (row) => {

@@ -17,11 +17,11 @@ const router = createRouter({
       name: 'chat',
       component: () => import('../views/ChatManager.vue'),
     },
-    // Chúng ta sẽ thêm route Login sau
+
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'), // Sẽ tạo sau
+      component: () => import('../views/LoginView.vue'),
     },
     {
       path: '/categories',
@@ -41,7 +41,7 @@ const router = createRouter({
     {
       path: '/products/add',
       name: 'product.add',
-      component: () => import('../views/products/ProductForm.vue'), // File này sẽ tạo ở bước sau
+      component: () => import('../views/products/ProductForm.vue'),
     },
     {
       path: '/products/edit/:id',
